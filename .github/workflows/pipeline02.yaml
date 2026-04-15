@@ -15,7 +15,7 @@ jobs:
 
       - name: Clone repository
         run: |
-          git clone https://github.com/Furius-Starfall/DevOps01.git
+          git clone git@github.com:Furius-Starfall/DevOps01.git
 
       - name: Create branch and commit changes
         run: |
@@ -30,10 +30,8 @@ jobs:
           ls -la
           git push -u origin BranchL2
         
-      - name: push changes with SSH key
+      - name: push changes
         run: |
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
           git push origin BranchL2
 
       - name: merge branch
