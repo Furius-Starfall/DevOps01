@@ -8,6 +8,7 @@ jobs:
 
 
     steps:
+      - uses: actions/checkout@v4
       - name: Create SSH key pair
         run: |
           ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
@@ -17,7 +18,6 @@ jobs:
           git clone https://github.com/Furius-Starfall/DevOps01.git
 
       - name: Create branch and commit changes
-        uses: actions/checkout@v4
         run: |
           cd DevOps01
           git config --global user.email "PetrH@gmail.com"
