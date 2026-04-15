@@ -16,7 +16,8 @@ jobs:
         run: |
           git clone https://github.com/Furius-Starfall/DevOps01.git
 
-      - name: Create branch and do changes
+      - name: Create branch and commit changes
+        uses: actions/checkout@v4
         run: |
           cd DevOps01
           git config --global user.email "PetrH@gmail.com"
@@ -29,9 +30,11 @@ jobs:
           ls -la
           git push -u origin BranchL2
         
-      - name: push changes
+      - name: push changes with SSH key
         run: |
-          git push BranchL2
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          git push origin BranchL2
 
       - name: merge branch
         run: |
