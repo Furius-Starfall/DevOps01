@@ -26,7 +26,7 @@ jobs:
           git add README.md
           git commit -m "Editing README.md from GitHub Actions"
           pwd
-          ls
+          ls -la
         
       - name: push changes
         run: |
