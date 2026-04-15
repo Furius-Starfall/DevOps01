@@ -14,12 +14,11 @@ jobs:
 
       - name: Clone repository
         run: |
-          mkdir temp2
-          cd temp2
           git clone https://github.com/Furius-Starfall/DevOps01.git
 
       - name: Create branch and do changes
         run: |
+          cd DevOps01
           git config --global user.email "PetrH@gmail.com"
           git config --global user.name "Petr"
           git checkout -b BranchL2
@@ -31,6 +30,7 @@ jobs:
         
       - name: push changes
         run: |
+          cd ..
           git push origin BranchL2
 
       - name: merge branch
