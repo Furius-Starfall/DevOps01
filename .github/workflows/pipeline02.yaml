@@ -20,7 +20,6 @@ jobs:
 
       - name: Create branch and do changes
         run: |
-          cd DevOps01
           git config --global user.email "PetrH@gmail.com"
           git config --global user.name "Petr"
           git checkout -b BranchL2
