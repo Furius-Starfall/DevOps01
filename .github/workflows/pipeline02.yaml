@@ -14,6 +14,8 @@ jobs:
 
       - name: Clone repository
         run: |
+          mkdir temp2
+          cd temp2
           git clone https://github.com/Furius-Starfall/DevOps01.git
 
       - name: Create branch and do changes
@@ -26,6 +28,7 @@ jobs:
           git add README.md
           git commit -m "Editing README.md from GitHub Actions"
           pwd
+          ls
         
       - name: push changes
         run: |
