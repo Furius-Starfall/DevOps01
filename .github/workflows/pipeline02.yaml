@@ -30,8 +30,7 @@ jobs:
         
       - name: push changes
         run: |
-          cd ..
-          git push origin BranchL2
+          git push BranchL2
 
       - name: merge branch
         run: |
