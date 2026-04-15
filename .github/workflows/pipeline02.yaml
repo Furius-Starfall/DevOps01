@@ -22,9 +22,10 @@ jobs:
           git config --global user.email "PetrH@gmail.com"
           git config --global user.name "Petr"
           git checkout -b BranchL2
-          echo "Some changes" > changes.txt
-          git add changes.txt
-          git commit -m "Add changes"
+          echo "Uprava z runneru" >> README.md
+          git add README.md
+          git commit -m "Editing README.md from GitHub Actions"
+          pwd
         
       - name: push changes
         run: |
