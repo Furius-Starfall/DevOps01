@@ -32,7 +32,9 @@ jobs:
         run: |
           git checkout main
           git merge BranchL2
-          git push origin main
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
 
 
 #      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
