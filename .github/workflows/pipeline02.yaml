@@ -1,27 +1,25 @@
 name: L2
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
+permissions:
+  contents: write
 jobs:
   build-L2:
     runs-on: ubuntu-latest
     
 
-
     steps:
-      - uses: actions/checkout@v4
       - name: Create SSH key pair
         run: |
           ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
 
-      - name: Clone repository
-        run: |
-          git clone https://github.com/Furius-Starfall/DevOps01.git
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Create branch and commit changes
+      - name: Create branch and push changes
         run: |
-          cd DevOps01
           git config --global user.email "PetrH@gmail.com"
-          git config --global user.name "Petr"
+          git config --global user.name "github-actions[bot]"
           git checkout -b BranchL2
           echo "Uprava z runneru" >> README.md
           git add README.md
@@ -29,18 +27,14 @@ jobs:
           pwd
           ls -la
           git push -u origin BranchL2
-        
-      - name: push changes with SSH key
-        run: |
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-          git push origin BranchL2
 
       - name: merge branch
         run: |
           git checkout main
           git merge BranchL2
-          git push origin main
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
 
 
 #      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
