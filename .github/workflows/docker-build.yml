@@ -34,7 +34,7 @@ jobs:
     - name: Build Docker image
       run: |
         echo "🐳 Buildování Docker image..."
-        docker build -t python-calculator:latest .
+        docker build -t python-calculator:latest -f L5/Dockerfile L5/
 
     - name: Test Docker container
       run: |
