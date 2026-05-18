@@ -23,9 +23,9 @@ jobs:
         python-version: '3.9'
 
     - name: Run unit tests
+      working-directory: L5/app
       run: |
         echo "🧪 Spouštění unit testů..."
-        working-directory: L5/app
         python -m unittest test_calculator -v
 
     - name: Set up Docker Buildx
