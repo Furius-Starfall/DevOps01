@@ -93,6 +93,8 @@ jobs:
     
     - name: Build and push Docker image to ECR
       run: |
+        echo $ecr_url
+        echo $ECR_URL
         docker build -t $ECR_URL:latest .
         
         echo "🚀 Pushing images to ECR..."
