@@ -34,15 +34,14 @@ jobs:
     - name: Build Docker image
       run: |
         echo "🐳 Buildování Docker image..."
-        docker build -t \$:latest .
-        docker build -t \$:\$ .
+        docker build -t python-calculator:latest .
 
     - name: Test Docker container
       run: |
         echo "🚀 Testování Docker kontejneru..."
-        docker run --rm \$:latest
+        docker run --rm python-calculator:latest
 
     - name: List Docker images
       run: |
         echo "📋 Seznam vytvořených images:"
-        docker images | grep \$
+        docker images | grep python-calculator
