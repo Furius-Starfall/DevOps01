@@ -1,1 +1,8 @@
 L4/tf/.terraform/
+L5/terraform/.terraform/
+L4/tf/.terraform.lock.hcl
+L5/terraform/.terraform.lock.hcl
+L4/tf/terraform.tfstate
+L4/tf/terraform.tfstate.backup
+L5/terraform/terraform.tfstate
+L5/terraform/terraform.tfstate.backup
