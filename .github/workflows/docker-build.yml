@@ -49,7 +49,7 @@ jobs:
   deploy-to-ecr:
     needs: build-and-test
     runs-on: ubuntu-latest
-    environment: production
+    environment: secrets
     if: github.ref == 'refs/heads/main'
     
     steps:
