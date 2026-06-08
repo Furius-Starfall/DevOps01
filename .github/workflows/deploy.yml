@@ -13,6 +13,8 @@ jobs:
     name: 'Terraform'
     runs-on: ubuntu-latest
     environment: secrets
+    env:
+      working-directory: ./L7/terraform
     
     # Nastavení permissions pro OIDC
     permissions:
@@ -28,7 +30,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+        aws-region: ${{ env.AWS_REGION }}
     
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
