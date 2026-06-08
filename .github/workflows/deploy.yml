@@ -100,6 +100,7 @@ jobs:
     - name: Get Load Balancer URL
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       id: lb_url
+      working-directory: ./L7/terraform
       run: |
         LB_URL=$(terraform output -raw load_balancer_url)
         echo "url=$LB_URL" >> $GITHUB_OUTPUT
