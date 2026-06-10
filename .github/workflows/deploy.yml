@@ -37,7 +37,7 @@ permissions:
 
 jobs:
   "L7":
-    if: ${{ github.event.inputs.lesson == 'L7' }}
+    #if: ${{ github.event.inputs.lesson == 'L7' }}
 
     name: 'Terraform'
     runs-on: ubuntu-latest
@@ -154,7 +154,7 @@ jobs:
 
 
   "L8":
-    if: ${{ github.event.inputs.lesson == 'L8' }}
+    #if: ${{ github.event.inputs.lesson == 'L8' }}
 
     runs-on: ubuntu-latest
     environment: dev
