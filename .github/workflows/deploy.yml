@@ -5,7 +5,7 @@ name: DevOps Course Pipeline
 env:
   default-branch: main
   python-version: "3.10"
-  LESSON: "L7"
+  LESSON: "L8"
   AWS_REGION: "eu-west-1"
   TF_VERSION: 1.5.0
 
@@ -16,7 +16,7 @@ on:
         lesson:
           description: 'Select the lesson to run'
           required: true
-          default: 'L7'
+          default: 'L8'
           type: choice
           options:
             - L7
