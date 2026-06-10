@@ -198,7 +198,7 @@ jobs:
       with:
         push: true
         context: L8/docker/
-        tags: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/mynginx:{{ github.sha }}
+        tags: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/mynginx:${{ github.sha }}
 
     - name: Terraform deploy
       working-directory: L8/terraform/
