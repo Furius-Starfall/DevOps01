@@ -6,7 +6,7 @@ env:
   default-branch: main
   python-version: "3.10"
   LESSON: "L8"
-  AWS_REGION: "eu-west-1"
+  AWS_REGION: "us-east-1"
   TF_VERSION: 1.5.0
 
 on: 
