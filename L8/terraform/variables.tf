@@ -5,7 +5,7 @@ variable "aws_region" {
 }
 
 variable "project_name" {
-    default = "ecs-nginx-demo"
+  default = "ecs-nginx-demo"
 }
 
 variable "aws_account_id" {
