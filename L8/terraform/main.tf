@@ -149,12 +149,12 @@ resource "aws_lb_listener" "http" {
 
 
 # ecs
-resource "aws_ecs_cluster" "lesson7" {
-  name = "lesson7"
+resource "aws_ecs_cluster" "lesson8" {
+  name = "lesson8"
 }
 
-resource "aws_ecs_task_definition" "lesson7" {
-  family                   = "lesson7"
+resource "aws_ecs_task_definition" "lesson8" {
+  family                   = "lesson8"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
@@ -177,10 +177,10 @@ resource "aws_ecs_task_definition" "lesson7" {
   ])
 }
 
-resource "aws_ecs_service" "lesson7" {
-  name            = "lesson7"
-  cluster        = aws_ecs_cluster.lesson7.id
-  task_definition = aws_ecs_task_definition.lesson7.arn
+resource "aws_ecs_service" "lesson8" {
+  name            = "lesson8"
+  cluster        = aws_ecs_cluster.lesson8.id
+  task_definition = aws_ecs_task_definition.lesson8.arn
   desired_count   = 1
 
   launch_type = "FARGATE"
@@ -198,38 +198,6 @@ resource "aws_ecs_service" "lesson7" {
     }
 }
 
-resource "aws_lb_target_group" "nginx" {
-  name        = "${var.project_name}-tg"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = data.aws_vpc.myvpc.id
-  target_type = "ip"
-
-  health_check {
-    enabled             = true
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 5
-    interval            = 30
-    path                = "/"
-    matcher             = "200"
-  }
-
-  tags = {
-    Name = "${var.project_name}-tg"
-  }
-}
-
-resource "aws_lb_listener" "nginx" {
-  load_balancer_arn = aws_lb.main.arn
-  port              = "80"
-  protocol          = "HTTP"
-  
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.nginx.arn
-  }
-}
 
 # ECS Cluster
 resource "aws_ecs_cluster" "main" {
@@ -269,78 +237,12 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 }
 
 # CloudWatch Log Group
-resource "aws_cloudwatch_log_group" "nginx" {
-  name              = "/ecs/${var.project_name}"
+resource "aws_cloudwatch_log_group" "lesson8" {
+  name              = "/ecs/lesson8"
   retention_in_days = 7
   
   tags = {
-    Name = "${var.project_name}-logs"
-  }
-}
-
-# ECS Task Definition
-resource "aws_ecs_task_definition" "nginx" {
-  family                   = "${var.project_name}-task"
-  network_mode             = "awsvpc"
-  requires_compatibilities = ["FARGATE"]
-  cpu                      = "256"
-  memory                   = "512"
-  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
-  
-  container_definitions = jsonencode([
-    {
-      name  = "nginx"
-      image = "nginx:alpine"
-      
-      portMappings = [
-        {
-          containerPort = 80
-          protocol      = "tcp"
-        }
-      ]
-      
-      logConfiguration = {
-        logDriver = "awslogs"
-        options = {
-          "awslogs-group"         = aws_cloudwatch_log_group.nginx.name
-          "awslogs-region"        = var.aws_region
-          "awslogs-stream-prefix" = "ecs"
-        }
-      }
-      
-      essential = true
-    }
-  ])
-  
-  tags = {
-    Name = "${var.project_name}-task"
-  }
-}
-
-# ECS Service
-resource "aws_ecs_service" "nginx" {
-  name            = "${var.project_name}-service"
-  cluster         = aws_ecs_cluster.main.id
-  task_definition = aws_ecs_task_definition.nginx.arn
-  desired_count   = 1
-  launch_type     = "FARGATE"
-  
-  network_configuration {
-    subnets          = [data.aws_subnets.ecssubnets.ids[0], data.aws_subnets.ecssubnets.ids[1]]
-    security_groups  = [aws_security_group.ecs_tasks.id]
-    assign_public_ip = true
-  }
-  
-  load_balancer {
-    target_group_arn = aws_lb_target_group.nginx.arn
-    container_name   = "nginx"
-    container_port   = 80
-  }
-  
-  depends_on = [aws_lb_listener.nginx]
-  
-  tags = {
-    Name = "${var.project_name}-service"
+    Name = "lesson8-logs"
   }
 }
 
