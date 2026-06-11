@@ -198,7 +198,6 @@ resource "aws_ecs_service" "lesson7" {
     }
 }
 
-
 resource "aws_lb_target_group" "nginx" {
   name        = "${var.project_name}-tg"
   port        = 80
