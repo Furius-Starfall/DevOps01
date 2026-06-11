@@ -194,12 +194,11 @@ jobs:
         username: ${{ secrets.AWS_ACCESS_KEY_ID }}
         password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}      
     - name: Build and push Docker image
-      working-directory: L8/docker/
       uses: docker/build-push-action@v4
       with:
         push: true
         context: L8/docker/
-        tags: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/mynginx:${{ github.sha }}
+        tags: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/mynginx:${{ github.run_number }}
 
     - name: Terraform deploy
       working-directory: L8/terraform/

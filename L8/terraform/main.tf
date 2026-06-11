@@ -163,7 +163,7 @@ resource "aws_ecs_task_definition" "lesson7" {
   container_definitions = jsonencode([
     {
       name      = "web"
-      image     = "nginx:latest"
+      image     =  ${var.aws_account_id}.dkr.ecr.us-east-1.amazonaws.com/mynginx:latest
       portMappings = [
         {
           containerPort = 80
