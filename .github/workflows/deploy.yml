@@ -40,7 +40,7 @@ permissions:
 
 jobs:
   "L7":
-    #if: ${{ github.event.inputs.lesson == 'L7' }}
+    if: ${{ github.event.inputs.lesson == 'L7' }}
 
     runs-on: ubuntu-latest
     environment: secrets 
@@ -156,7 +156,7 @@ jobs:
 
 
   "L8":
-    #if: ${{ github.event.inputs.lesson == 'L8' }}
+    if: ${{ github.event.inputs.lesson == 'L8' }}
 
     runs-on: ubuntu-latest
     environment: secrets
@@ -220,7 +220,7 @@ jobs:
         terraform apply -auto-approve -no-color tfplan
         
   "L9":
-    #if: ${{ github.event.inputs.lesson == 'L9' }}
+    if: ${{ github.event.inputs.lesson == 'L9' }}
 
     runs-on: ubuntu-latest
     environment: dev
@@ -258,7 +258,7 @@ jobs:
           lesson-9/reports/
         
   "L10":
-    if: ${{ github.event.inputs.lesson == 'L10' }}
+    #if: ${{ github.event.inputs.lesson == 'L10' }}
 
     runs-on: ubuntu-latest
     environment: secrets
