@@ -13,7 +13,7 @@ resource "aws_cloudwatch_dashboard" "main" {
 
         properties = {
           metrics = [
-            ["AWS/ECS", "CPUUtilization"]
+            ["AWS/ECS", "CPUUtilization", "ClusterName", "lesson8"]
           ]
           view    = "timeSeries"
           stacked = false
@@ -37,7 +37,7 @@ resource "aws_cloudwatch_dashboard" "main" {
 
         properties = {
           metrics = [
-            ["AWS/ECS", "MemoryUtilization"]
+            ["AWS/ECS", "MemoryUtilization", "ClusterName", "lesson8"]
           ]
           view    = "timeSeries"
           stacked = false
