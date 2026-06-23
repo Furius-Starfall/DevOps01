@@ -5,7 +5,7 @@ name: DevOps Course Pipeline
 env:
   default-branch: main
   python-version: "3.10"
-  LESSON: "L8"
+  LESSON: "L10"
   AWS_REGION: "us-east-1"
   TF_VERSION: 1.5.0
 
@@ -16,11 +16,12 @@ on:
         lesson:
           description: 'Select the lesson to run'
           required: true
-          default: 'L8'
+          default: 'L10'
           type: choice
           options:
             - L7
             - L8
+            - L10
 # inputs:
 #     name:
 #       type: choice
@@ -39,7 +40,7 @@ permissions:
 
 jobs:
   "L7":
-    if: ${{ github.event.inputs.lesson == 'L7' }}
+    #if: ${{ github.event.inputs.lesson == 'L7' }}
 
     runs-on: ubuntu-latest
     environment: secrets 
@@ -219,7 +220,7 @@ jobs:
         terraform apply -auto-approve -no-color tfplan
         
   "L9":
-    if: ${{ github.event.inputs.lesson == 'L9' }}
+    #if: ${{ github.event.inputs.lesson == 'L9' }}
 
     runs-on: ubuntu-latest
     environment: dev
@@ -256,65 +257,66 @@ jobs:
           lesson-9/results.jtl
           lesson-9/reports/
         
-    # - name: Run Docker container test
-    #   run: |
-    #     docker run --rm --name demoapp  demoapp:latest python python -m unittest discover -s demoapp/tests
+  "L10":
+    if: ${{ github.event.inputs.lesson == 'L10' }}
 
-    # - run: terraform init
-    #   working-directory: lesson-4/live-demo
+    runs-on: ubuntu-latest
+    environment: secrets
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with: 
+        terraform_version: "1.11.1"      
+    - name: Terraform create ecr repository
+      working-directory: L10/terraform/
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ env.AWS_REGION }}
+        TF_VAR_aws_account_id: ${{ vars.AWS_ACCOUNT_ID }}
 
-    # - id: plan
-    #   run: terraform plan -no-color
-    #   working-directory: lesson-4/live-demo
+        TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        TF_VAR_aws_region: ${{ env.AWS_REGION }}
+        TF_IN_AUTOMATION: true
+        TF_INPUT: false
 
-    # - run: echo ${{ steps.plan.outputs.stdout }}
-    # - run: echo ${{ steps.plan.outputs.stderr }}
-    # - run: echo ${{ steps.plan.outputs.exitcode }}   
-    
-    # - id: apply
- 
-    #   if: ${{ env.LESSON == 'lesson4' }}
-    #   working-directory: lesson-4/live-demo
-    #   run: terraform apply -auto-approve -no-color
-    # - run: echo ${{ steps.apply.outputs.stdout }}
-  # validate:
-  #   runs-on: ubuntu-latest
+        TF_WORKSPACE: dev
+      run: |
+        terraform init
+        terraform plan -no-color -target=aws_ecr_repository.mynginx -out=tfplan
+        terraform apply -auto-approve -no-color tfplan 
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+    - name: Login to ECR
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+        username: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}      
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        push: true
+        context: L10/docker/
+        tags: ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/mynginx:latest
 
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - name: Set up Python 3.10
-  #     uses: actions/setup-python@v3
-  #     with:
-  #       python-version: "3.10"
-  #   - name: Install dependencies
-  #     run: |
-  #       python -m pip install --upgrade pip
-  #       pip install flake8 pytest
-  #       if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-  #   - name: Lint with flake8
-  #     run: |
-  #       # stop the build if there are Python syntax errors or undefined names
-  #       flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-  #       # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-  #       flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-  #   - name: Test with pytest
-  #     run: |
-  #       pytest
-  # test:
-
-  #   runs-on: ubuntu-latest
-
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - name: Set up Python 3.10
-  #     uses: actions/setup-python@v3
-  #     with:
-  #       python-version: "3.10"
-  #   - name: Install dependencies
-  #     run: |
-  #       python -m pip install --upgrade pip
-  #       pip install flake8 pytest
-  #       if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-  #   - name: Test with pytest
-  #     run: |
-  #       pytest
+    - name: Terraform deploy
+      working-directory: L10/terraform/
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ env.AWS_REGION }}     
+        TF_VAR_aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        TF_VAR_aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        TF_VAR_aws_account_id: ${{ vars.AWS_ACCOUNT_ID }}
+        TF_VAR_aws_region: ${{ env.AWS_REGION }}
+        TF_IN_AUTOMATION: true
+        TF_INPUT: false
+        TF_WORKSPACE: dev
+      run: |
+        terraform init
+        terraform plan -no-color -out=tfplan
+        terraform apply -auto-approve -no-color tfplan
